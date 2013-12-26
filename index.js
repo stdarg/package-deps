@@ -4,7 +4,7 @@ var is = require('is2');
 var _ = require('lodash');
 var fs = require('fs');
 var path = require('path');
-//var debug = require('debug')('find-package-deps');
+var debug = require('debug')('find-package-deps');
 
 /**
  * Finds all dependancies for a path to a package.json. It will read the
@@ -33,30 +33,28 @@ exports.findAll = function(pathToPackageJson) {
  * @param {Object} modules The object to store the results.
  * @private
  */
-function getModules(pathToPackageJson, name, modules) {
-    have(arguments, { pathToPackageJson: 'str', name: 'str', modules: 'obj' });
+function getModules(pathToPackageJson, name, report) {
+    have(arguments, { pathToPackageJson: 'str', name: 'str', report: 'obj' });
     if (!fs.existsSync(pathToPackageJson))  return;
 
-    var module;
+    var mod;
     try {
-        module = require(pathToPackageJson);
+        mod = require(pathToPackageJson);
     } catch(err) {
         return;
     }
-    if (!module)  return;
+    if (!mod)  return;
 
-    if (is.empty(module.dependencies))
-        modules.depVersions = undefined;
-    else
-        modules.depVersions = module.dependencies;
+    if (mod.dependencies)
+        report.dependcies = mod.dependencies;
 
     var dir = path.join(path.dirname(pathToPackageJson), 'node_modules');
 
     // for each dependency, recursively iterate
-    _.forOwn(module.dependencies, function(ver, modName) {
+    _.forOwn(mod.dependencies, function(ver, modName) {
         var nextPackJson = path.join(dir, modName, 'package.json');
-        modules[modName] = {};
-        getModules(nextPackJson, modName, modules[modName] );
+        report[modName] = {};
+        getModules(nextPackJson, modName, report[modName] );
     });
 }
 
