@@ -1,6 +1,6 @@
 {
   "name": "package-deps",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Examine a package.json's dependencies and find all sub-depdendcies.",
   "main": "index.js",
   "scripts": {
