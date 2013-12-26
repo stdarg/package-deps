@@ -6,8 +6,16 @@ var fs = require('fs');
 var path = require('path');
 //var debug = require('debug')('find-package-deps');
 
+/**
+ * Finds all dependancies 
+ */
 exports.findAll = function(pathToPackageJson) {
     have(arguments, { pathToPackageJson: 'str' });
+    if (pathToPackageJson === '')
+        throw new Error('pathToPackageJson is an empty str');
+    var bname = path.basename(pathToPackageJson);
+    if (bname !== 'package.json')
+        pathToPackageJson = path.join(pathToPackageJson, 'package.json');
     pathToPackageJson = path.resolve(pathToPackageJson);
     var modules = {};
     getModules(pathToPackageJson, 'test', modules);
@@ -20,6 +28,7 @@ exports.findAll = function(pathToPackageJson) {
  * @param {String} pathToPackageJson The path to the package.json.
  * @param {String} name The name of the current module.
  * @param {Object} modules The object to store the results.
+ * @private
  */
 function getModules(pathToPackageJson, name, modules) {
     have(arguments, { pathToPackageJson: 'str', name: 'str', modules: 'obj' });
