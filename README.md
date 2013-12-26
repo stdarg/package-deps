@@ -17,19 +17,19 @@ Examine a package.json's dependencies and find all sub-depdendcies.
 
 The above has the following output:
 
-    { depVersions:
+    { dependcies:
        { async: '0.2.9',
          debug: '0.7.4',
          have: '0.2.3',
          is2: '0.0.11',
          lodash: '2.4.1' },
-      async: { depVersions: undefined },
-      debug: { depVersions: undefined },
-      have: { depVersions: undefined },
+      async: {},
+      debug: { dependcies: {} },
+      have: {},
       is2:
-       { depVersions: { 'deep-is': '0.1.2' },
-         'deep-is': { depVersions: undefined } },
-      lodash: { depVersions: undefined } }
+       { dependcies: { 'deep-is': '0.1.2' },
+         'deep-is': {} },
+      lodash: {} }
 
 ### findAll(pathToPackageJson)
 
