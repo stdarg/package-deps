@@ -15,6 +15,22 @@ Examine a package.json's dependencies and find all sub-depdendcies.
     var util = require('util');
     console.log(util.inspect(deps, {colors:true, depth: null}));
 
+The above has the following output:
+
+    { depVersions:
+       { async: '0.2.9',
+         debug: '0.7.4',
+         have: '0.2.3',
+         is2: '0.0.11',
+         lodash: '2.4.1' },
+      async: { depVersions: undefined },
+      debug: { depVersions: undefined },
+      have: { depVersions: undefined },
+      is2:
+       { depVersions: { 'deep-is': '0.1.2' },
+         'deep-is': { depVersions: undefined } },
+      lodash: { depVersions: undefined } }
+
 ### findAll(pathToPackageJson)
 
 Finds all dependancies for a path to a package.json. It will read the
