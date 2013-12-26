@@ -7,7 +7,10 @@ var path = require('path');
 //var debug = require('debug')('find-package-deps');
 
 /**
- * Finds all dependancies 
+ * Finds all dependancies for a path to a package.json. It will read the
+ * dependencies and find all the sub-dependencies.
+ * @param {String} pathToPackageJson Path to the package.json file.
+ * @return {Object} An object describing the dependencies. 
  */
 exports.findAll = function(pathToPackageJson) {
     have(arguments, { pathToPackageJson: 'str' });
