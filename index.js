@@ -44,7 +44,7 @@ function getModules(pathToPackageJson, report) {
 
     if (!mod)  return;
     if (mod.dependencies)
-        report.dependcies = mod.dependencies;
+        report.dependencies = mod.dependencies;
     report.packageJson = pathToPackageJson;
 
     var dir = path.join(path.dirname(pathToPackageJson), 'node_modules');
