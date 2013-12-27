@@ -43,12 +43,13 @@ function getModules(pathToPackageJson, name, report) {
     } catch(err) {
         return;
     }
-    if (!mod)  return;
 
+    if (!mod)  return;
     if (mod.dependencies)
         report.dependcies = mod.dependencies;
 
     var dir = path.join(path.dirname(pathToPackageJson), 'node_modules');
+    report.packageJson = path.join(dir, name, 'package.json');
 
     // for each dependency, recursively iterate
     _.forOwn(mod.dependencies, function(ver, modName) {
