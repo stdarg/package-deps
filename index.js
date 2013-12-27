@@ -1,10 +1,9 @@
 'use strict';
 var have = require('have');
-var is = require('is2');
 var _ = require('lodash');
 var fs = require('fs');
 var path = require('path');
-var debug = require('debug')('find-package-deps');
+//var debug = require('debug')('find-package-deps');
 
 /**
  * Finds all dependancies for a path to a package.json. It will read the
@@ -21,7 +20,7 @@ exports.findAll = function(pathToPackageJson) {
         pathToPackageJson = path.join(pathToPackageJson, 'package.json');
     pathToPackageJson = path.resolve(pathToPackageJson);
     var modules = {};
-    getModules(pathToPackageJson, 'test', modules);
+    getModules(pathToPackageJson, modules);
     return modules;
 };
 
@@ -29,12 +28,11 @@ exports.findAll = function(pathToPackageJson) {
  * A recursive synchronous function to iterate over all the dependencies
  * in package.json. The data is colleceted in modules parameter.
  * @param {String} pathToPackageJson The path to the package.json.
- * @param {String} name The name of the current module.
  * @param {Object} modules The object to store the results.
  * @private
  */
-function getModules(pathToPackageJson, name, report) {
-    have(arguments, { pathToPackageJson: 'str', name: 'str', report: 'obj' });
+function getModules(pathToPackageJson, report) {
+    have(arguments, { pathToPackageJson: 'str', report: 'obj' });
     if (!fs.existsSync(pathToPackageJson))  return;
 
     var mod;
@@ -47,15 +45,15 @@ function getModules(pathToPackageJson, name, report) {
     if (!mod)  return;
     if (mod.dependencies)
         report.dependcies = mod.dependencies;
+    report.packageJson = pathToPackageJson;
 
     var dir = path.join(path.dirname(pathToPackageJson), 'node_modules');
-    report.packageJson = path.join(dir, name, 'package.json');
 
     // for each dependency, recursively iterate
     _.forOwn(mod.dependencies, function(ver, modName) {
         var nextPackJson = path.join(dir, modName, 'package.json');
         report[modName] = {};
-        getModules(nextPackJson, modName, report[modName] );
+        getModules(nextPackJson, report[modName] );
     });
 }
 

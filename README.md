@@ -21,15 +21,14 @@ The above has the following output:
        { async: '0.2.9',
          debug: '0.7.4',
          have: '0.2.3',
-         is2: '0.0.11',
          lodash: '2.4.1' },
-      async: {},
-      debug: { dependcies: {} },
-      have: {},
-      is2:
-       { dependcies: { 'deep-is': '0.1.2' },
-         'deep-is': {} },
-      lodash: {} }
+      packageJson: '/Users/edmond/src/package-deps/package.json',
+      async: { packageJson: '/Users/edmond/src/package-deps/node_modules/async/package.json' },
+      debug:
+       { dependcies: {},
+         packageJson: '/Users/edmond/src/package-deps/node_modules/debug/package.json' },
+      have: { packageJson: '/Users/edmond/src/package-deps/node_modules/have/package.json' },
+      lodash: { packageJson: '/Users/edmond/src/package-deps/node_modules/lodash/package.json' } }
 
 ### findAll(pathToPackageJson)
 
