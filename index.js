@@ -1,6 +1,7 @@
 'use strict';
 var have = require('have');
 var _ = require('lodash');
+var is = require('is2');
 var fs = require('fs');
 var path = require('path');
 //var debug = require('debug')('find-package-deps');
@@ -9,9 +10,10 @@ var path = require('path');
  * Finds all dependancies for a path to a package.json. It will read the
  * dependencies and find all the sub-dependencies.
  * @param {String} pathToPackageJson Path to the package.json file.
+ * @param {Boolean} doNotRecurse Only return the top-level dependendcies.
  * @return {Object} An object describing the dependencies. 
  */
-exports.findAll = function(pathToPackageJson) {
+exports.findAll = function(pathToPackageJson, doNotRecurse) {
     have(arguments, { pathToPackageJson: 'str' });
     if (pathToPackageJson === '')
         throw new Error('pathToPackageJson is an empty str');
@@ -20,7 +22,7 @@ exports.findAll = function(pathToPackageJson) {
         pathToPackageJson = path.join(pathToPackageJson, 'package.json');
     pathToPackageJson = path.resolve(pathToPackageJson);
     var modules = {};
-    getModules(pathToPackageJson, modules);
+    getModules(pathToPackageJson, modules, 0, doNotRecurse ? 1 : undefined);
     return modules;
 };
 
@@ -29,9 +31,10 @@ exports.findAll = function(pathToPackageJson) {
  * in package.json. The data is colleceted in modules parameter.
  * @param {String} pathToPackageJson The path to the package.json.
  * @param {Object} modules The object to store the results.
+ * @param {Boolean} doNotRecurse Only return the top-level dependendcies.
  * @private
  */
-function getModules(pathToPackageJson, report) {
+function getModules(pathToPackageJson, report, cnt, max) {
     have(arguments, { pathToPackageJson: 'str', report: 'obj' });
     if (!fs.existsSync(pathToPackageJson))  return;
 
@@ -43,9 +46,14 @@ function getModules(pathToPackageJson, report) {
     }
 
     if (!mod)  return;
-    if (mod.dependencies)
-        report.dependencies = mod.dependencies;
+    if (mod.dependencies && is.obj(mod.dependencies) &&
+        _.keys(mod.dependencies).length) {
+        if (max === undefined || (max && (cnt < max))) {
+            report.dependencies = mod.dependencies;
+        }
+    }
     report.packageJson = pathToPackageJson;
+    if (cnt === max) return;
 
     var dir = path.join(path.dirname(pathToPackageJson), 'node_modules');
 
@@ -53,7 +61,7 @@ function getModules(pathToPackageJson, report) {
     _.forOwn(mod.dependencies, function(ver, modName) {
         var nextPackJson = path.join(dir, modName, 'package.json');
         report[modName] = {};
-        getModules(nextPackJson, report[modName] );
+        getModules(nextPackJson, report[modName], cnt+1, max );
     });
 }
 
