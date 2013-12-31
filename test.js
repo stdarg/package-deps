@@ -1,6 +1,9 @@
 'use strict';
 var packageDeps = require('./index');
 var assert = require('assert');
+var inspect = require('util').inspect;
+var is = require('is2');
+var _ = require('lodash');
 
 describe('package-deps findAll', function() {
     it('throws with non-string argument', function() {
@@ -27,50 +30,50 @@ describe('package-deps findAll', function() {
 
     it('finds all the dependencies with "./"', function() {
         var expected = { dependencies:
-            {  async: '0.2.9', debug: '0.7.4', have: '0.2.3', is2: '0.0.11', lodash: '2.4.1' },
-            packageJson: '/Users/edmond/src/package-deps/package.json',
-            async: { packageJson: '/Users/edmond/src/package-deps/node_modules/async/package.json' },
-            debug: { packageJson: '/Users/edmond/src/package-deps/node_modules/debug/package.json' },
-            have: { packageJson: '/Users/edmond/src/package-deps/node_modules/have/package.json' },
-            is2:
-            { dependencies: { 'deep-is': '0.1.2' },
-              packageJson: '/Users/edmond/src/package-deps/node_modules/is2/package.json',
-              'deep-is': { packageJson: '/Users/edmond/src/package-deps/node_modules/is2/node_modules/deep-is/package.json' } },
-            lodash: { packageJson: '/Users/edmond/src/package-deps/node_modules/lodash/package.json' } };
+            {  async: '0.2.9', debug: '0.7.4', have: '0.2.3', is2: '0.0.11', lodash: '2.4.1' }};
 
         var deps = packageDeps.findAll('./');
-        assert.deepEqual(deps, expected);
+        assert.deepEqual(deps.dependencies, expected.dependencies);
+        assert.ok(is.nonEmptyStr(deps.packageJson));
+        assert.ok(is.nonEmptyObj(deps.async));
+        assert.ok(is.nonEmptyObj(deps.debug));
+        assert.ok(is.nonEmptyObj(deps.have));
+        assert.ok(is.nonEmptyObj(deps.is2));
+        assert.ok(is.nonEmptyObj(deps.lodash));
     });
 
     it('finds all the dependencies', function() {
         var expected = { dependencies:
-            { async: '0.2.9', debug: '0.7.4', have: '0.2.3', is2: '0.0.11', lodash: '2.4.1' },
-            packageJson: '/Users/edmond/src/package-deps/package.json',
-            async: { packageJson: '/Users/edmond/src/package-deps/node_modules/async/package.json' },
-            debug: { packageJson: '/Users/edmond/src/package-deps/node_modules/debug/package.json' },
-            have: { packageJson: '/Users/edmond/src/package-deps/node_modules/have/package.json' },
-                is2:
-                  { dependencies: { 'deep-is': '0.1.2' },
-                    packageJson: '/Users/edmond/src/package-deps/node_modules/is2/package.json',
-                    'deep-is': {packageJson: '/Users/edmond/src/package-deps/node_modules/is2/node_modules/deep-is/package.json' } },
-            lodash: { packageJson: '/Users/edmond/src/package-deps/node_modules/lodash/package.json' } };
+            { async: '0.2.9', debug: '0.7.4', have: '0.2.3', is2: '0.0.11', lodash: '2.4.1' }
+        };
 
         var deps = packageDeps.findAll('./package.json');
-        assert.deepEqual(deps, expected);
+        assert.deepEqual(deps.dependencies, expected.dependencies);
+        assert.ok(is.nonEmptyStr(deps.packageJson));
+        assert.ok(is.nonEmptyObj(deps.async));
+        assert.ok(is.nonEmptyObj(deps.debug));
+        assert.ok(is.nonEmptyObj(deps.have));
+        assert.ok(is.nonEmptyObj(deps.is2));
+        assert.ok(is.nonEmptyObj(deps.is2.dependencies));
+        assert.ok(is.nonEmptyStr(deps.is2.dependencies['deep-is']));
+        assert.ok(is.nonEmptyObj(deps.is2['deep-is']));
     });
+
     it('finds only top-level dependencies', function() {
         var expected = { dependencies:
-            { async: '0.2.9', debug: '0.7.4', have: '0.2.3', is2: '0.0.11', lodash: '2.4.1' },
-            packageJson: '/Users/edmond/src/package-deps/package.json',
-            async: { packageJson: '/Users/edmond/src/package-deps/node_modules/async/package.json' },
-            debug: { packageJson: '/Users/edmond/src/package-deps/node_modules/debug/package.json' },
-            have: { packageJson: '/Users/edmond/src/package-deps/node_modules/have/package.json' },
-            is2: { packageJson: '/Users/edmond/src/package-deps/node_modules/is2/package.json' },
-            lodash: { packageJson: '/Users/edmond/src/package-deps/node_modules/lodash/package.json' } };
+            { async: '0.2.9', debug: '0.7.4', have: '0.2.3', is2: '0.0.11', lodash: '2.4.1' }
+        };
 
         var doNotRecurse = true;
         var deps = packageDeps.findAll('./package.json', doNotRecurse);
-        assert.deepEqual(deps, expected);
+        assert.deepEqual(deps.dependencies, expected.dependencies);
+        assert.ok(is.nonEmptyStr(deps.packageJson));
+        assert.ok(is.nonEmptyObj(deps.async));
+        assert.ok(is.nonEmptyObj(deps.debug));
+        assert.ok(is.nonEmptyObj(deps.have));
+        assert.ok(is.nonEmptyObj(deps.is2));
+        assert.ok(_.keys(deps.is2).length === 1);
+        assert.ok(is.nonEmptyObj(deps.lodash));
     });
 });
 
