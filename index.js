@@ -10,10 +10,10 @@ var path = require('path');
  * Finds all dependancies for a path to a package.json. It will read the
  * dependencies and find all the sub-dependencies.
  * @param {String} pathToPackageJson Path to the package.json file.
- * @param {Boolean} doNotRecurse Only return the top-level dependendcies.
+ * @param {Number} [depth] How far down the dep tree to go. OPtional
  * @return {Object} An object describing the dependencies. 
  */
-exports.findAll = function(pathToPackageJson, doNotRecurse) {
+exports.findAll = function(pathToPackageJson, depth) {
     have(arguments, { pathToPackageJson: 'str' });
     if (pathToPackageJson === '')
         throw new Error('pathToPackageJson is an empty str');
@@ -22,7 +22,7 @@ exports.findAll = function(pathToPackageJson, doNotRecurse) {
         pathToPackageJson = path.join(pathToPackageJson, 'package.json');
     pathToPackageJson = path.resolve(pathToPackageJson);
     var modules = {};
-    getModules(pathToPackageJson, modules, 0, doNotRecurse ? 1 : undefined);
+    getModules(pathToPackageJson, modules, 0, depth);
     return modules;
 };
 

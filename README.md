@@ -30,7 +30,7 @@ The above has the following output:
       have: { packageJson: '/Users/edmond/src/package-deps/node_modules/have/package.json' },
       lodash: { packageJson: '/Users/edmond/src/package-deps/node_modules/lodash/package.json' } }
 
-### findAll(pathToPackageJson)
+### findAll(pathToPackageJson [, depth])
 
 Finds all dependancies for a path to a package.json. It will read the
 dependencies and find all the sub-dependencies.
@@ -38,6 +38,7 @@ dependencies and find all the sub-dependencies.
 #### Params: 
 
 * **String** *pathToPackageJson* Path to the package.json file.
+* **Number** *\[depth\]* How far down the dependency tree to go. Optional. If not defined, all dependencies are found. If 1, only the top-level dependencies are found.
 
 #### Return:
 
