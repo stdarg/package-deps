@@ -59,6 +59,14 @@ describe('package-deps findAll', function() {
         assert.ok(is.nonEmptyObj(deps.is2['deep-is']));
     });
 
+    it('finds only top-level dependencies, depth=0', function() {
+        var depth = 0;
+        var deps = packageDeps.findAll('./package.json', depth);
+        assert.ok(is.nonEmptyObj(deps));
+        assert.ok(is.nonEmptyStr(deps.packageJson));
+        assert.ok(Object.keys(deps).length === 1);
+    });
+
     it('finds only top-level dependencies, depth=1', function() {
         var expected = { dependencies:
             { async: '0.2.9', debug: '0.7.4', have: '0.2.3', is2: '0.0.11', lodash: '2.4.1' }
