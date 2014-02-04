@@ -1,11 +1,14 @@
 'use strict';
 var packageDeps = require('./index');
 var assert = require('assert');
-//var inspect = require('util').inspect;
 var is = require('is2');
 var _ = require('lodash');
 
 describe('package-deps findAll', function() {
+    var expected = { dependencies:
+        { async: '0.2.10', debug: '0.7.4', have: '0.2.3', is2: '0.0.12', lodash: '2.4.1' }
+    };
+
     it('throws with non-string argument', function() {
         var deps;
         try {
@@ -29,9 +32,6 @@ describe('package-deps findAll', function() {
     });
 
     it('finds all the dependencies with "./"', function() {
-        var expected = { dependencies:
-            {  async: '0.2.9', debug: '0.7.4', have: '0.2.3', is2: '0.0.11', lodash: '2.4.1' }};
-
         var deps = packageDeps.findAll('./');
         assert.deepEqual(deps.dependencies, expected.dependencies);
         assert.ok(is.nonEmptyStr(deps.packageJson));
@@ -43,10 +43,6 @@ describe('package-deps findAll', function() {
     });
 
     it('finds all the dependencies', function() {
-        var expected = { dependencies:
-            { async: '0.2.9', debug: '0.7.4', have: '0.2.3', is2: '0.0.11', lodash: '2.4.1' }
-        };
-
         var deps = packageDeps.findAll('./package.json');
         assert.deepEqual(deps.dependencies, expected.dependencies);
         assert.ok(is.nonEmptyStr(deps.packageJson));
@@ -68,10 +64,6 @@ describe('package-deps findAll', function() {
     });
 
     it('finds only top-level dependencies, depth=1', function() {
-        var expected = { dependencies:
-            { async: '0.2.9', debug: '0.7.4', have: '0.2.3', is2: '0.0.11', lodash: '2.4.1' }
-        };
-
         var depth = 1;
         var deps = packageDeps.findAll('./package.json', depth);
         assert.deepEqual(deps.dependencies, expected.dependencies);
@@ -85,10 +77,6 @@ describe('package-deps findAll', function() {
     });
 
     it('finds all dependencies, depth=2', function() {
-        var expected = { dependencies:
-            { async: '0.2.9', debug: '0.7.4', have: '0.2.3', is2: '0.0.11', lodash: '2.4.1' }
-        };
-
         var depth = 2;
         var deps = packageDeps.findAll('./package.json', depth);
         assert.deepEqual(deps.dependencies, expected.dependencies);

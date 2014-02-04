@@ -15,11 +15,14 @@ var path = require('path');
  */
 exports.findAll = function(pathToPackageJson, depth) {
     have(arguments, { pathToPackageJson: 'str' });
+
     if (pathToPackageJson === '')
         throw new Error('pathToPackageJson is an empty str');
+
     var bname = path.basename(pathToPackageJson);
-    if (bname !== 'package.json')
+    if (bname !== 'package.json' && fs.lstatSync(pathToPackageJson).isDirectory())
         pathToPackageJson = path.join(pathToPackageJson, 'package.json');
+
     pathToPackageJson = path.resolve(pathToPackageJson);
     var modules = {};
     getModules(pathToPackageJson, modules, 0, depth);
