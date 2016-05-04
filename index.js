@@ -27,13 +27,13 @@ exports.findAll = function(pathToPackageJson, depth) {
     var modules = {};
     var pkg = require(pathToPackageJson);
 
-    module.prime = {};
-    module.prime.name = pkg.name;
-    module.prime.version = pkg.version;
+    modules.prime = {};
+    modules.prime.name = pkg.name;
+    modules.prime.version = pkg.version;
     if (pkg.repository && pkg.repository.url)
-        module.prime.repository = pkg.repository.url;
+        modules.prime.repository = pkg.repository.url;
     else
-        module.prime.repository = 'N/A';
+        modules.prime.repository = 'N/A';
 
     getModules(pathToPackageJson, modules, 0, depth);
     return modules;
