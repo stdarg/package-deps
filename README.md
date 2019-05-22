@@ -1,6 +1,9 @@
 package-deps
 =================
 
+This is deprecated, as it was designed for how NPM used to download packages.
+Unless you have a really version of NPM, don't use this.
+
 Examine a package.json's dependencies and find all sub-depdendcies.
 
 ## Installation
