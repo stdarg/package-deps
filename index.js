@@ -1,6 +1,7 @@
 'use strict';
 var have = require('have');
-var _ = require('lodash');
+var keys = require('lodash.keys');
+var forOwn = require('lodash.forown');
 var is = require('is2');
 var fs = require('fs');
 var path = require('path');
@@ -60,7 +61,7 @@ function getModules(pathToPackageJson, report, cnt, max) {
 
     if (!mod)  return;
     if (mod.dependencies && is.obj(mod.dependencies) &&
-        _.keys(mod.dependencies).length) {
+        keys(mod.dependencies).length) {
         if (max === undefined || (max && (cnt < max))) {
             report.dependencies = mod.dependencies;
         }
@@ -71,10 +72,9 @@ function getModules(pathToPackageJson, report, cnt, max) {
     var dir = path.join(path.dirname(pathToPackageJson), 'node_modules');
 
     // for each dependency, recursively iterate
-    _.forOwn(mod.dependencies, function(ver, modName) {
+    forOwn(mod.dependencies, function(ver, modName) {
         var nextPackJson = path.join(dir, modName, 'package.json');
         report[modName] = {};
         getModules(nextPackJson, report[modName], cnt+1, max );
     });
 }
-
