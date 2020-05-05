@@ -4,7 +4,9 @@
   "description": "Examine a package.json's dependencies and find all sub-depdendcies.",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter list ./test.js"
+    "test": "./node_modules/.bin/mocha --reporter list ./test.js",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -33,9 +35,11 @@
     "is2": "0.0.12",
     "lodash": "^4.17.15",
     "lodash.forown": "^4.4.0",
-    "lodash.keys": "^4.2.0"
+    "lodash.keys": "^4.2.0",
+    "snyk": "^1.317.0"
   },
   "devDependencies": {
     "mocha": "^7.1.1"
-  }
+  },
+  "snyk": true
 }
