@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/stdarg/find-package-deps",
   "dependencies": {
-    "async": "0.2.10",
+    "async": "2.6.4",
     "debug": "^4.1.1",
     "have": "0.2.3",
     "is2": "0.0.12",
